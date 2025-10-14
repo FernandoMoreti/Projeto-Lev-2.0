@@ -1,8 +1,15 @@
+"use client";
+
 import Image from "next/image";
 import Header from "./components/header";
+import Input from "./components/Input";
 import { LuUpload } from "react-icons/lu";
+import { FiSave } from "react-icons/fi";
+import { useState } from "react";
 
 export default function Home() {
+
+  const [name, setName] = useState()
 
   const col_opcoes = [
     "NUM_BANCO",
@@ -47,7 +54,7 @@ export default function Home() {
             <p className="text-sm text-gray-500 pt-1 pb-5">Selecione um arquivo Excel (.xlsx, .xls)</p>
             <label
               htmlFor="file-upload"
-              className="cursor-pointer flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:bg-gray-50 transition"
+              className="cursor-pointer flex flex-col items-center justify-center gap-2 border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-purple-500 hover:bg-gray-50 transition"
             >
               <LuUpload size={40} className="text-gray-500" />
               <p className="text-sm font-medium text-gray-700">Clique para fazer upload</p>
@@ -65,12 +72,25 @@ export default function Home() {
             <p className="text-sm text-gray-500 pt-1 pb-1">Colunas disponiveis para mapeamento</p>
             {
               col_opcoes.map((col) => (
-                <p className="border-1 border-gray-300 inset-shadow-sm inset-shadow-gray-400 py-2 px-5 rounded-xl mt-4">{col}</p>
+                <p className="border-1 border-gray-200 inset-shadow-2xs inset-shadow-gray-400 py-2 px-5 rounded-xl mt-4">{col}</p>
               ))
             }
           </div>
         </div>
-        <div></div>
+        <div className="flex flex-col gap-5">
+            <div className="border-1 border-gray-300 p-5 rounded-xl shadow-xl">
+              <h1 className="flex items-center text-xl font-semibold gap-2"><FiSave size={20} className="text-purple-500" /> Salvar Mapeamento</h1>
+              <p className="text-sm text-gray-500 pt-1 pb-5">Dê um nome para este mapeamento</p>
+              <p className="flex items-center text-sm font-semibold pb-2">Nome do Mapeamento</p>
+              <Input
+                value={name}
+                type="text"
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Ex: Itau"
+              />
+              <button className="flex items-center justify-center gap-2 w-full mt-3 bg-gradient-to-r from-purple-700 to-purple-400 rounded-xl px-5 py-2 transition-all duration-300 cursor-pointer text-white hover:-translate-y-1"><FiSave size={15} /> Salvar Mapeamento</button>
+            </div>
+        </div>
       </section>
     </>
   );
