@@ -60,11 +60,15 @@ export default function Home() {
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
 
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+      const isAcertoProducao = file.name.toLowerCase().startsWith("acerto da producao");
+
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+        defval: "",
+        range: isAcertoProducao ? 2 : 0
+      });
 
       setFile(jsonData);
 
-      // Pega os nomes das colunas da primeira linha
       if (jsonData.length > 0) {
         const colunas = Object.keys(jsonData[0]);
         setColumns(colunas);
