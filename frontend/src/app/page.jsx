@@ -13,6 +13,37 @@ export default function Home() {
   const [name, setName] = useState("")
   const [file, setFile] = useState([])
   const [columns, setColumns] = useState([]);
+  const [nome, setNome] = useState();
+  const [NUM_BANCO, setNUM_BANCO] = useState();
+  const [NOM_BANCO, setNOM_BANCO] = useState();
+  const [NUM_PROPOSTA, setNUM_PROPOSTA] = useState();
+  const [NUM_CONTRATO, setNUM_CONTRATO] = useState();
+  const [DAT_CREDITO, setDAT_CREDITO] = useState();
+  const [VAL_BRUTO, setVAL_BRUTO] = useState();
+  const [VAL_LIQUIDO, setVAL_LIQUIDO] = useState();
+  const [VAL_BASE_COMISSAO, setVAL_BASE_COMISSAO] = useState();
+  const [VAL_COMISSAO, setVAL_COMISSAO] = useState();
+  const [PCL_COMISSAO, setPCL_COMISSAO] = useState();
+  const [DSC_TIPO_COMISSAO, setDSC_TIPO_COMISSAO] = useState();
+  const [COD_LOJA, setCOD_LOJA] = useState();
+  const [COD_UNIDADE_EMPRESA, setCOD_UNIDADE_EMPRESA] = useState();
+  const [COD_BANCO, setCOD_BANCO] = useState();
+  const [COD_TIPO_PROPOSTA_EMPRESTIMO, setCOD_TIPO_PROPOSTA_EMPRESTIMO] = useState();
+  const [DSC_TIPO_PROPOSTA_EMPRESTIMO, setDSC_TIPO_PROPOSTA_EMPRESTIMO] = useState();
+  const [NIC_CTR_USUARIO, setNIC_CTR_USUARIO] = useState();
+  const [COD_PRODUTO, setCOD_PRODUTO] = useState();
+  const [COD_PRODUTOR_VENDA, setCOD_PRODUTOR_VENDA] = useState();
+  const [COD_PRODUTOR_VENDA_BANCO, setCOD_PRODUTOR_VENDA_BANCO] = useState();
+  const [COD_TIPO_COMISSAO, setCOD_TIPO_COMISSAO] = useState();
+  const [COD_SITUACAO_EMPRESTIMO, setCOD_SITUACAO_EMPRESTIMO] = useState();
+  const [QTD_PARCELA, setQTD_PARCELA] = useState();
+  const [NUM_PARCELA_DIFERIDA_EMPRESA, setNUM_PARCELA_DIFERIDA_EMPRESA] = useState();
+  const [DAT_EMPRESTIMO, setDAT_EMPRESTIMO] = useState();
+  const [DAT_CONFIRMACAO, setDAT_CONFIRMACAO] = useState();
+  const [DAT_ESTORNO, setDAT_ESTORNO] = useState();
+  const [DAT_CTR_INCLUSAO, setDAT_CTR_INCLUSAO] = useState();
+  const [TIPO_COMISSAO_BANCO, setTIPO_COMISSAO_BANCO] = useState();
+  const [PCL_TAXA_EMPRESTIMO, setPCL_TAXA_EMPRESTIMO] = useState();
 
   const col_opcoes = [
     "NUM_BANCO",
@@ -78,11 +109,61 @@ export default function Home() {
     reader.readAsArrayBuffer(file);
   };
 
+  const handleCreateModelo = async () => {
+    try {
+      const response = await fetch("http://localhost:8000", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          nome,
+          NUM_BANCO,
+          NOM_BANCO,
+          NUM_PROPOSTA,
+          NUM_CONTRATO,
+          DAT_CREDITO,
+          VAL_BRUTO,
+          VAL_LIQUIDO,
+          VAL_BASE_COMISSAO,
+          VAL_COMISSAO,
+          PCL_COMISSAO,
+          DSC_TIPO_COMISSAO,
+          COD_LOJA,
+          COD_UNIDADE_EMPRESA,
+          COD_BANCO,
+          COD_TIPO_PROPOSTA_EMPRESTIMO,
+          DSC_TIPO_PROPOSTA_EMPRESTIMO,
+          NIC_CTR_USUARIO,
+          COD_PRODUTO,
+          COD_PRODUTOR_VENDA,
+          COD_PRODUTOR_VENDA_BANCO,
+          COD_TIPO_COMISSAO,
+          COD_SITUACAO_EMPRESTIMO,
+          QTD_PARCELA,
+          NUM_PARCELA_DIFERIDA_EMPRESA,
+          DAT_EMPRESTIMO,
+          DAT_CONFIRMACAO,
+          DAT_ESTORNO,
+          DAT_CTR_INCLUSAO,
+          TIPO_COMISSAO_BANCO,
+          PCL_TAXA_EMPRESTIMO
+        })
+      });
+
+      const data = await response.json();
+      console.log("Modelo salvo:", data);
+    } catch (error) {
+      console.error("Erro ao salvar modelo:", error);
+    }
+  };
+
+
 
   return (
     <>
       <Header />
-      <section className="grid grid-cols-2 p-10 gap-2">
+      <section className="grid md:grid-cols-2 p-10 gap-2">
         <div className="flex flex-col gap-5">
           <div className="border-1 bg-white border-gray-300 p-5 rounded-xl shadow-xl">
             <h1 className="flex items-center text-xl font-semibold gap-2"><LuUpload size={20} className="text-purple-500" /> Upload do Arquivo</h1>
@@ -123,12 +204,12 @@ export default function Home() {
               <p className="text-sm text-gray-500 pt-1 pb-5">Dê um nome para este mapeamento</p>
               <p className="flex items-center text-sm font-semibold pb-2">Nome do Mapeamento</p>
               <Input
-                value={name}
+                value={nome}
                 type="text"
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setNome(e.target.value)}
                 placeholder="Ex: Itau"
               />
-              <button className="flex items-center justify-center gap-2 w-full mt-3 bg-gradient-to-r from-purple-700 to-purple-400 rounded-xl px-5 py-2 transition-all duration-300 cursor-pointer text-white hover:-translate-y-1"><FiSave size={15} /> Salvar Mapeamento</button>
+              <button onClick={handleCreateModelo} className="flex items-center justify-center gap-2 w-full mt-3 bg-gradient-to-r from-purple-700 to-purple-400 rounded-xl px-5 py-2 transition-all duration-300 cursor-pointer text-white hover:-translate-y-1"><FiSave size={15} /> Salvar Mapeamento</button>
             </div>
         </div>
       </section>
