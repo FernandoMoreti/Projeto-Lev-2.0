@@ -138,7 +138,7 @@ export default function Home() {
             {
               columns.length > 0 ? (
                 columns.map((col) => (
-                  <p className="border-1 border-gray-200 py-2 px-5 rounded-xl mt-4">{col}</p>
+                  <p key={col} className="border-1 border-gray-200 py-2 px-5 rounded-xl mt-4">{col}</p>
                 ))
               ) : (
                 <p className="text-sm text-gray-400">Nenhum arquivo carregado.</p>

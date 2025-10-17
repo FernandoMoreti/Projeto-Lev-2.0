@@ -8,6 +8,7 @@ import Link from "next/link"
 export default function main() {
     const [bancos, setBancos] = useState([])
     const [banco, setBanco] = useState("")
+    const [file, setFile] = useState()
     const [loading, setLoading] = useState(false)
     
     useEffect(() => {
@@ -49,9 +50,22 @@ export default function main() {
                             <h1 className='flex justify-center text-xl font-semibold'>Bem vindo ao Conversor WORKBANK</h1>
                             <form onSubmit={handleSubmit} className='flex flex-col gap-5' action="">
                                 <p className='text-lg pt-5'>Importe o relatorio:</p>
-                                <input className="border rounded-xl p-5 shadow-lg cursor-pointer" onChange={(e) => setFile(e.target.files[0])} type="file" />
+                                <label
+                                    htmlFor="fileInput"
+                                    className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl p-5 bg-white shadow-md cursor-pointer hover:border-violet-500 hover:bg-violet-50 transition duration-200"
+                                >
+                                    <span className="text-gray-600 font-medium">
+                                        {file ? file.name : "Escolher arquivo"}
+                                    </span>
+                                    <input
+                                        id="fileInput"
+                                        type="file"
+                                        className="hidden"
+                                        onChange={(e) => setFile(e.target.files[0])}
+                                    />
+                                </label>
                                 <p className='text-lg'>Escolha o banco:</p>
-                                <select onChange={(e) => {setBanco(e.target.value)}} className='border rounded-xl p-5 shadow-lg cursor-pointer' name="Banco" id="">
+                                <select onChange={(e) => {setBanco(e.target.value)}} className='border border-purple-700 rounded-xl p-5 shadow-lg cursor-pointer' name="Banco" id="">
                                     <option className='hidden'>Escolha um banco</option>
                                     {
                                         bancos.map((banco) => (
