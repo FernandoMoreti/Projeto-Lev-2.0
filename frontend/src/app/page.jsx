@@ -3,8 +3,8 @@
 import { useState } from "react";
 import * as XLSX from "xlsx";
 
-import Header from "./components/header";
-import Input from "./components/Input";
+import Header from "../components/header";
+import Input from "../components/Input";
 import { LuUpload } from "react-icons/lu";
 import { FiSave } from "react-icons/fi";
 import { MdLink } from "react-icons/md";
