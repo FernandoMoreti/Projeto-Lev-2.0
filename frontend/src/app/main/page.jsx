@@ -43,7 +43,7 @@ export default function main() {
             <div>
                 <section className='flex flex-col h-screen'>
                     <div className="flex justify-end">
-                        <Link href={"/"} prefetch={true} className="absolute m-5 transition-all duration-300 cursor-pointer hover:-translate-y-1"><MdAddCircleOutline size={50} className="text-purple-700" /></Link>
+                        <Link href={"/"} prefetch={true} className="absolute m-5 cursor-pointer hover:-translate-y-1"><MdAddCircleOutline size={50} className="text-purple-700 hover:text-purple-400" /></Link>
                     </div>
                     <div className='flex-1 flex justify-center items-center'>
                         <div className='flex flex-col p-10 h-120 w-120 shadow-2xl bg-white shadow-gray-700 rounded-l-4xl'>
@@ -52,7 +52,7 @@ export default function main() {
                                 <p className='text-lg pt-5'>Importe o relatorio:</p>
                                 <label
                                     htmlFor="fileInput"
-                                    className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl p-5 bg-white shadow-md cursor-pointer hover:border-violet-500 hover:bg-violet-50 transition duration-200"
+                                    className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-xl p-5 bg-white shadow-md cursor-pointer hover:border-violet-500 hover:bg-violet-50"
                                 >
                                     <span className="text-gray-600 font-medium">
                                         {file ? file.name : "Escolher arquivo"}

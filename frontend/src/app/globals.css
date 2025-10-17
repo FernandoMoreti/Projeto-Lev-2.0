@@ -3,3 +3,7 @@
 body {
   background-color: #f7fbff;
 }
+
+* {
+  transition: all 0.3s ease-in-out;
+}
