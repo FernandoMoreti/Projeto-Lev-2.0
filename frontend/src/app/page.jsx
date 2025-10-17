@@ -95,6 +95,7 @@ export default function Home() {
 
       const data = await response.json();
       console.log("Modelo salvo:", data);
+      setSelecoes({})
     } catch (error) {
       console.error("Erro ao salvar modelo:", error);
     }
