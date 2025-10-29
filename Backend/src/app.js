@@ -1,7 +1,7 @@
+const bancoController = require('./controller/bancoController');
 const express = require('express');
 const app = express();
 const cors = require("cors")
-const bancoController = require('./controller/bancoController');
 
 
 
