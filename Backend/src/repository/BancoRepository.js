@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require('fs');
 
 class BancoRepository {
-    executar(banco, file) {
+    executar(banco, file, bancoName) {
 
         if (!file) {
             return res.status(400).json({ error: "Nenhum arquivo enviado" });
@@ -15,18 +15,20 @@ class BancoRepository {
 
         const rows = xlsx.utils.sheet_to_json(sheet, { defval: null });
 
-        console.log("Total de linhas:", rows.length);
-        console.log("Colunas detectadas:", Object.keys(rows[0] || {}));
-        console.log("Primeira linha:", rows[0]);
-
         const colunas = [
             "NUM_BANCO",
             "NOM_BANCO",
             "NUM_PROPOSTA",
             "NUM_CONTRATO",
+            "NOM_CLIENTE",
+            "COD_CPF_CLIENTE",
+            "DSC_PRODUTO",
+            "DSC_SITUACAO_BANCO",
+            "DSC_OBSERVACAO",
             "DAT_CREDITO",
             "VAL_BRUTO",
             "VAL_LIQUIDO",
+            "VAL_SALDO_REFINANCIAMENTO",
             "VAL_BASE_COMISSAO",
             "VAL_COMISSAO",
             "PCL_COMISSAO",
@@ -59,15 +61,20 @@ class BancoRepository {
 
         const linhasTransformadas = rows.map((row) => {
             const novaLinha = {};
-            for (const [origem, destino] of Object.entries(mapeamento)) {
-                if (destino && row.hasOwnProperty(destino)) {
-                    novaLinha[origem] = row[destino];
-                }
-                else if (row.hasOwnProperty(origem)) {
-                    novaLinha[origem] = row[origem];
+
+            for (const [colunaDestino, colunaOrigem] of Object.entries(mapeamento)) {
+                if (colunaOrigem) {
+                    novaLinha[colunaDestino] = row.hasOwnProperty(colunaOrigem)
+                        ? row[colunaOrigem]
+                        : null;
                 } else {
-                    novaLinha[origem] = null;
+                    novaLinha[colunaDestino] = null;
                 }
+            }
+
+            if (bancoName === "V8") {
+                novaLinha['TIPO_COMISSAO_BANCO'] = "DIRETA"
+                novaLinha['NUM_BANCO'] = "1725"
             }
             return novaLinha;
         });
@@ -76,7 +83,10 @@ class BancoRepository {
         const newWorkbook = xlsx.utils.book_new();
         xlsx.utils.book_append_sheet(newWorkbook, newSheet, "Transformado");
 
-        const outputPath = path.resolve("resultado.xlsx");
+        console.log(file)
+
+        const outputPath = path.resolve("C:/Users/ferna/projeto/ProjetoLev/output", `${bancoName}.xlsx`);
+
         xlsx.writeFile(newWorkbook, outputPath);
 
         console.log(`✅ Arquivo transformado salvo em: ${outputPath}`);
