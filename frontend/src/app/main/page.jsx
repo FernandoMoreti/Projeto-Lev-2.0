@@ -8,7 +8,7 @@ import Link from "next/link"
 export default function main() {
     const [bancos, setBancos] = useState([])
     const [banco, setBanco] = useState("")
-    const [file, setFile] = useState()
+    const [file, setFile] = useState("")
     const [loading, setLoading] = useState(false)
     
     useEffect(() => {
@@ -33,9 +33,28 @@ export default function main() {
         fetchData()
     }, [])
 
-    const handleSubmit = (e) => {
+    const handleSubmit =  async (e) => {
         e.preventDefault()
-        console.log(banco)
+
+        
+        try {
+            setLoading(true)
+
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("banco", banco);
+            
+            const response = await fetch("http://localhost:8000/executar", {
+                method: "POST",
+                body: formData
+            })
+
+            console.log(response)
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setLoading(false)
+        }
     }
     
     return (

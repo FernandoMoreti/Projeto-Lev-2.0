@@ -22,11 +22,13 @@ class BancoController {
     }
 
     async executar (req, res) {
-        const { file, banco } = req.body;
+        const file = req.file;
+        const banco = req.body.banco;
 
         
         try {
             const bancoResult = await Banco.findOne({ where: { nome: banco } });
+            console.log(" Retorno: " + bancoResult)
             const newExcel = await BancoRepository.executar(bancoResult.dataValues, file);
             res.status(200).json({ message: 'Execução bem-sucedida' });
         }

@@ -21,9 +21,15 @@ export default function Home() {
     "NOM_BANCO",
     "NUM_PROPOSTA",
     "NUM_CONTRATO",
+    "NOM_CLIENTE",
+    "COD_CPF_CLIENTE",
+    "DSC_PRODUTO",
+    "DSC_SITUACAO_BANCO",
+    "DSC_OBSERVACAO",
     "DAT_CREDITO",
     "VAL_BRUTO",
     "VAL_LIQUIDO",
+    "VAL_SALDO_REFINANCIAMENTO",
     "VAL_BASE_COMISSAO",
     "VAL_COMISSAO",
     "PCL_COMISSAO",
@@ -47,7 +53,8 @@ export default function Home() {
     "DAT_CTR_INCLUSAO",
     "TIPO_COMISSAO_BANCO",
     "PCL_TAXA_EMPRESTIMO"
-  ]
+  ];
+
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];

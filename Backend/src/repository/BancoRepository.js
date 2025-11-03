@@ -1,44 +1,87 @@
-const XLSX = require('xlsx');
+const xlsx = require("xlsx");
+const path = require("path");
 const fs = require('fs');
 
 class BancoRepository {
     executar(banco, file) {
-        console.log(banco)
-        console.log("CHEGUEI BUCETA")
 
-        const mapeamento = {
-        "Cliente": "Nome do Cliente",
-        "Produto": "Item",
-        "Valor Total": "Preço"
-        };
-
-        // Caminhos dos arquivos:
-        const arquivoEntrada = file;
-        const arquivoSaida = 'saida.xlsx';
-
-        // Lê o arquivo Excel de entrada:
-        const workbook = XLSX.readFile(arquivoEntrada);
-        const primeiraAba = workbook.SheetNames[0];
-        const dados = XLSX.utils.sheet_to_json(workbook.Sheets[primeiraAba]);
-
-        // Transforma os dados conforme o mapeamento:
-        const dadosTransformados = dados.map(linha => {
-        const novaLinha = {};
-        for (const [colunaOriginal, novaColuna] of Object.entries(mapeamento)) {
-            novaLinha[novaColuna] = linha[colunaOriginal] || '';
+        if (!file) {
+            return res.status(400).json({ error: "Nenhum arquivo enviado" });
         }
-        return novaLinha;
+
+        const workbook = xlsx.readFile(path.resolve(file.path));
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+
+        const rows = xlsx.utils.sheet_to_json(sheet, { defval: null });
+
+        console.log("Total de linhas:", rows.length);
+        console.log("Colunas detectadas:", Object.keys(rows[0] || {}));
+        console.log("Primeira linha:", rows[0]);
+
+        const colunas = [
+            "NUM_BANCO",
+            "NOM_BANCO",
+            "NUM_PROPOSTA",
+            "NUM_CONTRATO",
+            "DAT_CREDITO",
+            "VAL_BRUTO",
+            "VAL_LIQUIDO",
+            "VAL_BASE_COMISSAO",
+            "VAL_COMISSAO",
+            "PCL_COMISSAO",
+            "DSC_TIPO_COMISSAO",
+            "COD_LOJA",
+            "COD_UNIDADE_EMPRESA",
+            "COD_BANCO",
+            "COD_TIPO_PROPOSTA_EMPRESTIMO",
+            "DSC_TIPO_PROPOSTA_EMPRESTIMO",
+            "NIC_CTR_USUARIO",
+            "COD_PRODUTO",
+            "COD_PRODUTOR_VENDA",
+            "COD_PRODUTOR_VENDA_BANCO",
+            "COD_TIPO_COMISSAO",
+            "COD_SITUACAO_EMPRESTIMO",
+            "QTD_PARCELA",
+            "NUM_PARCELA_DIFERIDA_EMPRESA",
+            "DAT_EMPRESTIMO",
+            "DAT_CONFIRMACAO",
+            "DAT_ESTORNO",
+            "DAT_CTR_INCLUSAO",
+            "TIPO_COMISSAO_BANCO",
+            "PCL_TAXA_EMPRESTIMO"
+        ];
+
+        const mapeamento = {};
+        for (const coluna of colunas) {
+            mapeamento[coluna] = banco[coluna] || null;
+        }
+
+        const linhasTransformadas = rows.map((row) => {
+            const novaLinha = {};
+            for (const [origem, destino] of Object.entries(mapeamento)) {
+                if (destino && row.hasOwnProperty(destino)) {
+                    novaLinha[origem] = row[destino];
+                }
+                else if (row.hasOwnProperty(origem)) {
+                    novaLinha[origem] = row[origem];
+                } else {
+                    novaLinha[origem] = null;
+                }
+            }
+            return novaLinha;
         });
 
-        // Cria uma nova planilha com o resultado:
-        const novoWorkbook = XLSX.utils.book_new();
-        const novaPlanilha = XLSX.utils.json_to_sheet(dadosTransformados);
-        XLSX.utils.book_append_sheet(novoWorkbook, novaPlanilha, 'Resultado');
+        const newSheet = xlsx.utils.json_to_sheet(linhasTransformadas);
+        const newWorkbook = xlsx.utils.book_new();
+        xlsx.utils.book_append_sheet(newWorkbook, newSheet, "Transformado");
 
-        // Salva o novo arquivo Excel:
-        XLSX.writeFile(novoWorkbook, arquivoSaida);
+        const outputPath = path.resolve("resultado.xlsx");
+        xlsx.writeFile(newWorkbook, outputPath);
 
-        console.log(`✅ Arquivo criado com sucesso: ${arquivoSaida}`);
+        console.log(`✅ Arquivo transformado salvo em: ${outputPath}`);
+
+        return linhasTransformadas;
 
     }
 }

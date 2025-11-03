@@ -27,6 +27,26 @@ const Bancos = sequelize.define("bancos", {
         type: DataTypes.STRING,
         allowNull: true
     },
+    NOM_CLIENTE: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    COD_CPF_CLIENTE: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    DSC_PRODUTO: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    DSC_SITUACAO_BANCO: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    DSC_OBSERVACAO: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     DAT_CREDITO: {
         type: DataTypes.STRING,
         allowNull: true
@@ -36,6 +56,10 @@ const Bancos = sequelize.define("bancos", {
         allowNull: true
     },
     VAL_LIQUIDO: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    VAL_SALDO_REFINANCIAMENTO: {
         type: DataTypes.STRING,
         allowNull: true
     },
