@@ -1,15 +1,19 @@
+const fs = require("fs");
 const xlsx = require("xlsx");
 const path = require("path");
-const fs = require('fs');
 
 class BancoRepository {
-    executar(banco, file, bancoName) {
-
+  executar(banco, file, bancoName) {
         if (!file) {
             return res.status(400).json({ error: "Nenhum arquivo enviado" });
         }
 
-        const workbook = xlsx.readFile(path.resolve(file.path));
+        let fileContent = fs.readFileSync(file.path, "utf8");
+
+        fileContent = fileContent.replace(/\.(?=\d{3,}(,|\.|$))/g, "");
+        fileContent = fileContent.replace(/,/g, ".");
+
+        const workbook = xlsx.read(fileContent, { type: "string" });
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
 
@@ -51,39 +55,42 @@ class BancoRepository {
             "DAT_ESTORNO",
             "DAT_CTR_INCLUSAO",
             "TIPO_COMISSAO_BANCO",
-            "PCL_TAXA_EMPRESTIMO"
+            "PCL_TAXA_EMPRESTIMO",
         ];
 
         const mapeamento = {};
+
         for (const coluna of colunas) {
             mapeamento[coluna] = banco[coluna] || null;
         }
 
         const linhasTransformadas = rows.map((row) => {
-            const novaLinha = {};
+        const novaLinha = {};
 
-            for (const [colunaDestino, colunaOrigem] of Object.entries(mapeamento)) {
-                if (colunaOrigem) {
-                    novaLinha[colunaDestino] = row.hasOwnProperty(colunaOrigem)
-                        ? row[colunaOrigem]
-                        : null;
-                } else {
-                    novaLinha[colunaDestino] = null;
-                }
+        for (const [colunaDestino, colunaOrigem] of Object.entries(mapeamento)) {
+            if (colunaOrigem) {
+                const valor = row.hasOwnProperty(colunaOrigem)
+                    ? row[colunaOrigem]
+                    : null;
+                novaLinha[colunaDestino] = valor;
+            } else {
+                novaLinha[colunaDestino] = null;
             }
+        }
 
-            if (bancoName === "V8") {
-                novaLinha['TIPO_COMISSAO_BANCO'] = "DIRETA"
-                novaLinha['NUM_BANCO'] = "1725"
-            }
-            return novaLinha;
+        novaLinha["NUM_BANCO"] = banco["NUM_BANCO"];
+        novaLinha["NOM_BANCO"] = banco["NOM_BANCO"];
+
+        if (banco["TIPO_COMISSAO_BANCO"] === null ) {
+            novaLinha["TIPO_COMISSAO_BANCO"] = "DIRETA";
+        }
+
+        return novaLinha;
         });
 
         const newSheet = xlsx.utils.json_to_sheet(linhasTransformadas);
         const newWorkbook = xlsx.utils.book_new();
         xlsx.utils.book_append_sheet(newWorkbook, newSheet, "Transformado");
-
-        console.log(file)
 
         const outputPath = path.resolve("C:/Users/ferna/projeto/ProjetoLev/output", `${bancoName}.xlsx`);
 
@@ -92,7 +99,6 @@ class BancoRepository {
         console.log(`✅ Arquivo transformado salvo em: ${outputPath}`);
 
         return linhasTransformadas;
-
     }
 }
 

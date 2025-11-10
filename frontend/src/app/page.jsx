@@ -17,8 +17,6 @@ export default function Home() {
   const [selecoes, setSelecoes] = useState({});
 
   const col_opcoes = [
-    "NUM_BANCO",
-    "NOM_BANCO",
     "NUM_PROPOSTA",
     "NUM_CONTRATO",
     "NOM_CLIENTE",
@@ -157,6 +155,26 @@ export default function Home() {
           <div className="border-1 bg-white border-gray-300 p-5 rounded-xl shadow-xl">
             <h1 className="flex items-center text-xl font-semibold gap-2">< MdLink size={20} className="text-purple-500" /> Associação de Colunas </h1>
             <p className="text-sm text-gray-500 pt-1 pb-5">Conecte as colunas do arquivo com as do sistema </p>
+            <div>
+              <p className="text-xs text-gray-400 mt-5">Numero do banco</p>
+
+              <input
+                className="flex w-full border-1 border-gray-200 py-2 px-5 rounded-xl mt-1"
+                type="number"
+                onChange={(e) => handleChange("NUM_BANCO", e.target.value)}
+              >
+              </input>
+            </div>
+            <div>
+              <p className="text-xs text-gray-400 mt-5">Nome do banco</p>
+
+              <input
+                className="flex w-full border-1 border-gray-200 py-2 px-5 rounded-xl mt-1"
+                type="text"
+                onChange={(e) => handleChange("NOM_BANCO", e.target.value)}
+              >
+              </input>
+            </div>
             {
               col_opcoes.map((col) => (
                 <div key={col}>
